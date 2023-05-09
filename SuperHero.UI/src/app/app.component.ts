@@ -10,6 +10,7 @@ import { SuperHeroService } from './services/super-hero.service';
 export class AppComponent {
   title = 'SuperHero.UI';
   heroes: SuperHero[] = [];
+  heroToEdit?: SuperHero
 
   constructor(private superHeroService: SuperHeroService) {}
 
@@ -18,5 +19,19 @@ export class AppComponent {
       .getSuperHeroes()
       .subscribe((result: SuperHero[]) => (this.heroes = result));
     console.log(this.heroes);
+  }
+
+  updateHeroList(heroes: SuperHero[]){
+    this.heroes = heroes;
+    this.heroToEdit = undefined;
+  }
+
+  initNewHero(){
+    this.heroToEdit = new SuperHero();
+  }
+
+  editHero(hero: SuperHero){
+    //shallow copy to disconnect the object from its table entry
+    this.heroToEdit = Object.assign({}, hero);
   }
 }
