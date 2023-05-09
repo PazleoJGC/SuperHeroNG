@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { SuperHero } from './models/super-hero';
 import { SuperHeroService } from './services/super-hero.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [AuthService]
 })
 export class AppComponent {
   title = 'SuperHero.UI';
   heroes: SuperHero[] = [];
   heroToEdit?: SuperHero
 
-  constructor(private superHeroService: SuperHeroService) {}
+  constructor(private auth: AuthService, private superHeroService: SuperHeroService) {}
 
   ngOnInit() : void {
     this.superHeroService
@@ -33,5 +35,9 @@ export class AppComponent {
   editHero(hero: SuperHero){
     //shallow copy to disconnect the object from its table entry
     this.heroToEdit = Object.assign({}, hero);
+  }
+
+  logout(){
+    return this.auth.logout();
   }
 }
