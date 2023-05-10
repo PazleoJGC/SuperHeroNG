@@ -7,18 +7,27 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadUser()
+  }
 
   user: any = null;
 
+  isValidUser() : boolean{
+    return this.user != undefined && Object.keys(this.user).length > 0
+  }
+
   loadUser(){
-    const request = this.http.get<any>(`${environment.apiUrl}/user`)
-    request.subscribe(user => this.user = user);
+    const request = this.http.get<any>(`${environment.apiUrl}/user`, {withCredentials: true})
+    request.subscribe(user => {
+      console.log(user)
+      this.user = user
+    })
   }
 
   login(loginForm: any){
     return this.http.post<any>(`${environment.apiUrl}/login`, loginForm, {withCredentials: true})
-      .subscribe(_=>{})
+      .subscribe(_ => this.loadUser())
   }
 
   register(){

@@ -12,11 +12,12 @@ namespace SuperHeroAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        //[HttpGet]
-        //public async Task<Dictionary<string,string>> User(ClaimsPrincipal user)
-        //{
-        //    return user.Claims.ToDictionary(x=>x.Type, x=>x.Value);
-        //}
+        [HttpGet("/api/user")]
+        public Dictionary<string, string> GetUser()
+        {
+            //User is a ControllerBase member
+            return User.Claims.ToDictionary(x => x.Type, x => x.Value);
+        }
 
         [HttpPost("/api/login")]
         public async Task<IResult> Login(LoginForm form)

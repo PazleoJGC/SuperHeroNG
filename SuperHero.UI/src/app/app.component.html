@@ -1,37 +1,13 @@
 <nav>
   <ul>
-    <li><a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Heroes</a></li>
     <li><a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a></li>
     <li><a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a></li>
+    <li><a routerLink="/heroes" routerLinkActive="active" ariaCurrentWhenActive="page">Heroes</a></li>
   </ul>
 </nav>
 
-<button (click)="logout()">Logout</button>
+<button *ngIf="isValidUser()" (click)="logout()">Logout</button>
 
 <hr>
 
 <router-outlet></router-outlet>
-
-<hr>
-
-<button (click)="initNewHero()">Create New Hero</button>
-
-<table>
-  <thead>
-    <th>Name</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Place</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let hero of heroes">
-      <td>{{hero.name}}</td>
-      <td>{{hero.firstName}}</td>
-      <td>{{hero.lastName}}</td>
-      <td>{{hero.place}}</td>
-      <td><button (click)="editHero(hero)">Edit</button></td>
-    </tr>
-  </tbody>
-</table>
-
-<app-edit-hero [hero]="heroToEdit" (heroesUpdated)="updateHeroList($event)"></app-edit-hero>

@@ -5,7 +5,6 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [AuthService]
 })
 export class LoginComponent {
   constructor(private auth: AuthService){}
