@@ -7,9 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) {
-    this.loadUser()
-  }
+  constructor(private http: HttpClient) {}
 
   user: any = null;
 
@@ -30,8 +28,9 @@ export class AuthService {
       .subscribe(_ => this.loadUser())
   }
 
-  register(){
-
+  register(registerForm: any){
+    return this.http.post<any>(`${environment.apiUrl}/register`, registerForm, {withCredentials: true})
+      .subscribe(_ => this.loadUser())
   }
 
   logout(){

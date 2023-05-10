@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace SuperHeroAPI.Controllers
 {
@@ -20,29 +17,45 @@ namespace SuperHeroAPI.Controllers
         }
 
         [HttpPost("/api/login")]
-        public async Task<IResult> Login(LoginForm form)
+        public async Task<IResult> Login(LoginForm form, SignInManager<IdentityUser> signInManager)
         {
-            return Results.SignIn(
-                new ClaimsPrincipal(
-                    new ClaimsIdentity(
-                        new Claim[]
-                        {
-                            new Claim("user_id", Guid.NewGuid().ToString()),
-                            new Claim("username", form.Username),
-                        },
-                        CookieAuthenticationDefaults.AuthenticationScheme
-                        )
-                    ),
-                    properties: new AuthenticationProperties() { IsPersistent = true },
-                    authenticationScheme: CookieAuthenticationDefaults.AuthenticationScheme
-                    );
+            var result = await signInManager.PasswordSignInAsync(form.Username, form.Password, true, false);
+            if (result.Succeeded)
+                return Results.Ok();
+            else
+                return Results.BadRequest();
+        }
+
+        [HttpPost("/api/register")]
+        public async Task<IResult> Register(RegisterForm form, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        {
+            if (form.Password != form.PasswordConfirm)
+                return Results.BadRequest();
+
+            var user = new IdentityUser(form.Username);
+            var createUser = await userManager.CreateAsync(user, form.Password);
+            if (!createUser.Succeeded)
+            {
+                return Results.BadRequest();
+            }
+
+            await signInManager.SignInAsync(user, true);
+            return Results.Ok();
         }
 
         [HttpGet("/api/logout"), Authorize]
-        public async Task<IResult> Logout()
+        public async Task<IResult> Logout(SignInManager<IdentityUser> signInManager)
         {
-            return Results.SignOut(authenticationSchemes: new List<string>() { CookieAuthenticationDefaults.AuthenticationScheme });
+            await signInManager.SignOutAsync();
+            return Results.Ok();
         }
+    }
+
+    public class RegisterForm
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string PasswordConfirm { get; set; }
     }
 
     public class LoginForm

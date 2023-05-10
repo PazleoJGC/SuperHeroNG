@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SuperHeroAPI.Data;
 
 namespace SuperHeroAPI
@@ -17,19 +19,31 @@ namespace SuperHeroAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                if (builder.Environment.IsDevelopment())
                 {
-                    config.Cookie.HttpOnly = false;
-                    config.Cookie.SameSite = SameSiteMode.None;
-                    config.LoginPath = "/api/login";
-                    config.LogoutPath = "/api/logout";
-                    config.Events.OnRedirectToAccessDenied = context =>
-                    {
-                        context.Response.StatusCode = (int)401;
-                        return Task.CompletedTask;
-                    };
+                    options.User.RequireUniqueEmail = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                }
+            })
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.ConfigureApplicationCookie(options =>
+                {
+                    options.Cookie.HttpOnly = false;
+                    options.Cookie.SameSite = SameSiteMode.None;
                 });
+            }
+
             builder.Services.AddAuthorization();
             builder.Services.AddDbContext<DataContext>(options =>
             {

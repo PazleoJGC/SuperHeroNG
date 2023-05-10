@@ -6,7 +6,10 @@
   </ul>
 </nav>
 
-<button *ngIf="isValidUser()" (click)="logout()">Logout</button>
+<div *ngIf="isValidUser()">
+  {{getUserName()}}
+  <button (click)="logout()">Logout</button>
+</div>
 
 <hr>
 
