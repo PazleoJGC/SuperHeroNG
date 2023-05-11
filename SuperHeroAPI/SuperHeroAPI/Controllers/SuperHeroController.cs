@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SuperHeroAPI.Data;
+using SuperHeroAPI.Models;
 
 namespace SuperHeroAPI.Controllers
 {
@@ -20,6 +20,16 @@ namespace SuperHeroAPI.Controllers
         public async Task<ActionResult<List<SuperHero>>> GetSuperHeroes()
         {
             return Ok(await _context.SuperHeroes.ToListAsync());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SuperHero>> GetSuperHero(int id)
+        {
+            var dbHero = await _context.SuperHeroes.Include(h => h.Media).FirstOrDefaultAsync(m => m.Id == id);
+            if (dbHero == null)
+                return NotFound("Hero not found.");
+            else
+                return Ok(dbHero);
         }
 
         [HttpPost]
@@ -41,6 +51,7 @@ namespace SuperHeroAPI.Controllers
             dbHero.FirstName = hero.FirstName;
             dbHero.LastName = hero.LastName;
             dbHero.Place = hero.Place;
+            dbHero.Media = hero.Media;
 
             await _context.SaveChangesAsync();
 

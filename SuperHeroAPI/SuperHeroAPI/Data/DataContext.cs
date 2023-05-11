@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SuperHeroAPI.Models;
 
 namespace SuperHeroAPI.Data
 {
@@ -12,5 +13,6 @@ namespace SuperHeroAPI.Data
         }
 
         public DbSet<SuperHero> SuperHeroes => Set<SuperHero>();
+        public DbSet<HeroMedia> HeroMedia => Set<HeroMedia>();
     }
 }

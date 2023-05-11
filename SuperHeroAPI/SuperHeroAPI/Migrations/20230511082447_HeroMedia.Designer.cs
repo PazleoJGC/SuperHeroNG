@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperHeroAPI.Data;
 
@@ -11,9 +12,11 @@ using SuperHeroAPI.Data;
 namespace SuperHeroAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230511082447_HeroMedia")]
+    partial class HeroMedia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace SuperHeroAPI.Migrations
 
                     b.HasIndex("MediaId");
 
-                    b.ToTable("HeroMediaSuperHero", (string)null);
+                    b.ToTable("HeroMediaSuperHero");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -255,7 +258,7 @@ namespace SuperHeroAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HeroMedia", (string)null);
+                    b.ToTable("HeroMedia");
                 });
 
             modelBuilder.Entity("SuperHeroAPI.Models.SuperHero", b =>
@@ -284,7 +287,7 @@ namespace SuperHeroAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SuperHeroes", (string)null);
+                    b.ToTable("SuperHeroes");
                 });
 
             modelBuilder.Entity("HeroMediaSuperHero", b =>
