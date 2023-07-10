@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SuperHeroAPI.Data;
 using SuperHeroAPI.Models;
@@ -32,7 +33,7 @@ namespace SuperHeroAPI.Controllers
                 return Ok(dbHero);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<List<SuperHero>>> CreateSuperHero(SuperHero hero)
         {
             _context.SuperHeroes.Add(hero);
@@ -40,7 +41,7 @@ namespace SuperHeroAPI.Controllers
             return await GetSuperHeroes();
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         public async Task<ActionResult<List<SuperHero>>> UpdateSuperHero(SuperHero hero)
         {
             var dbHero = await _context.SuperHeroes.FindAsync(hero.Id);
@@ -58,7 +59,7 @@ namespace SuperHeroAPI.Controllers
             return await GetSuperHeroes();
         }
         
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<List<SuperHero>>> DeleteSuperHero(int id)
         {
             var dbHero = await _context.SuperHeroes.FindAsync(id);

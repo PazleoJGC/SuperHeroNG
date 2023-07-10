@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SuperHeroAPI.Models;
 using SuperHeroAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HeroMediaAPI.Controllers
 {
@@ -32,7 +33,7 @@ namespace HeroMediaAPI.Controllers
                 return Ok(dbMedium);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<List<HeroMedia>>> CreateHeroMedia(HeroMedia medium)
         {
             _context.HeroMedia.Add(medium);
@@ -41,7 +42,7 @@ namespace HeroMediaAPI.Controllers
             return await GetHeroMedia();
         }
 
-        [HttpPost("{id}/addHeroes")]
+        [HttpPost("{id}/addHeroes"), Authorize]
         public async Task<ActionResult<HeroMedia>> HeroMediaAddCharacters(int id, List<int> heroes = null)
         {
             var dbMedium = await _context.HeroMedia.Include(m => m.Characters).FirstOrDefaultAsync(m => m.Id == id);
@@ -60,7 +61,7 @@ namespace HeroMediaAPI.Controllers
             return await GetHeroMedium(id);
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         public async Task<ActionResult<List<HeroMedia>>> UpdateHeroMedia(HeroMedia medium)
         {
             var dbMedium = (await GetHeroMedium(medium.Id)).Value;
@@ -77,7 +78,7 @@ namespace HeroMediaAPI.Controllers
             return await GetHeroMedia();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<ActionResult<List<HeroMedia>>> DeleteHeroMedia(int id)
         {
             var dbMedium = await _context.HeroMedia.FindAsync(id);

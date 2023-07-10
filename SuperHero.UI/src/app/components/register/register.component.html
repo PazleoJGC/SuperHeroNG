@@ -1,7 +1,6 @@
-<p>register works!</p>
-<div>
-    <input [(ngModel)]="username"/>
-    <input [(ngModel)]="password" type="password"/>
-    <input [(ngModel)]="passwordConfirm" type="password"/>
+<div class="login-form-container">
+    <input [(ngModel)]="username" placeholder="username"/>
+    <input [(ngModel)]="password" type="password" placeholder="password"/>
+    <input [(ngModel)]="passwordConfirm" type="password" placeholder="repeat password"/>
     <button (click)="register()">Register</button>
 </div>
