@@ -6,16 +6,14 @@
         <li><a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a></li>
         <li><a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a></li>
         <li><a routerLink="/heroes" routerLinkActive="active" ariaCurrentWhenActive="page">Heroes</a></li>
+        <li *ngIf="isValidUser()">
+          <button (click)="logout()">Logout {{getUserName()}}</button>
+        </li>
       </ul>
     </nav>
   </header>
 </div>
 
 <div class="main-container">
-  <div *ngIf="isValidUser()">
-    {{getUserName()}}
-    <button (click)="logout()">Logout</button>
-    <hr>
-  </div>
   <router-outlet></router-outlet>
 </div>
